@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdant — Multi-Agent Farm Decision Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="noise-overlay" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+
+<nav class="nav" id="mainNav">
+  <div class="nav-brand">
+    <span class="brand-mark"></span>
+    <span class="brand-word">Verdant</span>
+    <span class="brand-badge" data-i18n="brand_badge">MULTI-AGENT SYSTEM</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <span class="nav-indicator" id="navIndicator" aria-hidden="true"></span>
+    <li><a href="#overview" data-i18n="nav_overview">Overview</a></li>
+    <li><a href="#farm" data-i18n="nav_farm">Farm</a></li>
+    <li><a href="#network" data-i18n="nav_network">Network</a></li>
+    <li><a href="#agents" data-i18n="nav_agents">Agents</a></li>
+    <li><a href="#plan" data-i18n="nav_plan">Plan</a></li>
+    <li><a href="#mechanism" data-i18n="nav_mechanism">Novelty &amp; Paper</a></li>
+    <li><a href="#activity" data-i18n="nav_activity">Activity</a></li>
+    <li><a href="#history" class="nav-history-link"><span data-i18n="nav_history">History</span> <span class="history-pill" id="historyNavBadge">0</span></a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-selector-wrap" title="Change Language / भाषा बदलें">
+      <span class="lang-globe" aria-hidden="true">🌐</span>
+      <select id="langSelector" class="lang-select" aria-label="Select Language">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="mr">मराठी (Marathi)</option>
+        <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+        <option value="te">తెలుగు (Telugu)</option>
+        <option value="ta">தமிழ் (Tamil)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="google">🌍 100+ More Languages...</option>
+      </select>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot" id="systemDot"></span>
+      <span id="systemStatusText" data-i18n="system_ready">SYSTEM READY</span>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <section class="hero" id="overview">
+    <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="hero-content">
+      <p class="eyebrow" data-i18n="hero_eyebrow">Agricultural decision intelligence</p>
+      <h1 data-i18n="hero_title">Intelligence for<br>every acre.</h1>
+      <p class="hero-sub" data-i18n="hero_sub">A multi-agent decision intelligence system transforming agricultural data into optimized production decisions.</p>
+
+      <div class="run-panel">
+        <div class="preset-row">
+          <label class="field">
+            <span data-i18n="location_crop">Location &amp; crop</span>
+            <select id="presetSelect">
+              <option value="nagpur" data-i18n="preset_nagpur">Nagpur, Maharashtra — Tomato</option>
+              <option value="nashik" data-i18n="preset_nashik">Nashik, Maharashtra — Onion</option>
+              <option value="ludhiana" data-i18n="preset_ludhiana">Ludhiana, Punjab — Wheat</option>
+              <option value="custom" data-i18n="preset_custom">Custom...</option>
+            </select>
+          </label>
+        </div>
+        <div class="custom-row" id="customRow" hidden>
+          <label class="field"><span>Latitude</span><input type="text" id="customLat" placeholder="21.1458"></label>
+          <label class="field"><span>Longitude</span><input type="text" id="customLon" placeholder="79.0882"></label>
+          <label class="field"><span>Commodity</span><input type="text" id="customCommodity" placeholder="Tomato"></label>
+          <label class="field"><span>State</span><input type="text" id="customState" placeholder="Maharashtra"></label>
+        </div>
+        <div class="leaf-quick-row">
+          <span class="leaf-quick-indicator" id="leafQuickDot"></span>
+          <span class="leaf-quick-label" data-i18n="active_leaf">Active Leaf:</span>
+          <span class="leaf-quick-name" id="leafQuickName" data-i18n="sample_leaf_name">Sample Leaf (Tomato)</span>
+          <button type="button" class="leaf-quick-btn" id="leafQuickUploadBtn" data-i18n="upload_my_leaf">Upload My Leaf</button>
+        </div>
+        <div class="run-row">
+          <button id="runBtn" class="run-btn">
+            <span class="run-btn-label" data-i18n="run_live_analysis">Run live analysis</span>
+          </button>
+          <p class="run-status" id="runStatus" data-i18n="run_status_ready">Select a location, then run — every number below comes from a live call.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="farm-section" id="farm" data-reveal>
+    <p class="eyebrow" data-i18n="farm_eyebrow">Digital twin</p>
+    <h2 data-i18n="farm_title">Your farm, rendered live</h2>
+    <p class="section-sub" data-i18n="farm_sub">A stylized 3D view of the field — terrain color reacts to real soil moisture, and rain intensity reacts to the real forecast. The mode tabs change what the view emphasizes; they're a lens on the same data, not separate sensor feeds.</p>
+
+    <div class="mode-tabs" id="modeTabs">
+      <button class="mode-tab active" data-mode="overview">Overview</button>
+      <button class="mode-tab" data-mode="health">Crop Health</button>
+      <button class="mode-tab" data-mode="soil">Soil</button>
+      <button class="mode-tab" data-mode="irrigation">Irrigation</button>
+      <button class="mode-tab" data-mode="yield">Yield</button>
+      <button class="mode-tab" data-mode="risk">Risk</button>
+      <button class="mode-tab" data-mode="agents">Agents</button>
+    </div>
+
+    <div class="farm-canvas-frame">
+      <div id="farmCanvasContainer" class="farm-canvas-container"></div>
+      <div class="farm-hint">Move your mouse over the scene for parallax · run a live analysis to see it react</div>
+    </div>
+    <div class="section-quick-bar">
+      <span class="quick-bar-label">Instant Nav:</span>
+      <a href="#network" class="quick-jump-pill">↓ Jump directly to Agent Network</a>
+      <a href="#plan" class="quick-jump-pill">↓ View Final Plan</a>
+    </div>
+  </section>
+
+  <section class="strip" data-reveal>
+    <div class="strip-tile" id="tile-weather">
+      <span class="tile-label">Rain probability · 12h</span>
+      <span class="tile-value" id="val-rain">—</span>
+      <svg class="range-bar" viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true">
+        <rect class="range-track" x="0" y="0" width="100" height="6" rx="3"/>
+        <rect class="range-fill" id="fill-rain" x="0" y="0" width="0" height="6" rx="3"/>
+      </svg>
+    </div>
+    <div class="strip-tile" id="tile-soil">
+      <span class="tile-label">Soil moisture</span>
+      <span class="tile-value" id="val-soil">—</span>
+      <span class="tile-tag" id="tag-soil"></span>
+      <svg class="range-bar" viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true">
+        <rect class="range-track" x="0" y="0" width="100" height="6" rx="3"/>
+        <rect class="range-fill" id="fill-soil" x="0" y="0" width="0" height="6" rx="3"/>
+      </svg>
+    </div>
+    <div class="strip-tile" id="tile-market">
+      <span class="tile-label">Mandi records found</span>
+      <span class="tile-value" id="val-market">—</span>
+    </div>
+    <div class="strip-tile" id="tile-location">
+      <span class="tile-label">Crop &amp; state</span>
+      <span class="tile-value tile-value-sm" id="val-location">—</span>
+    </div>
+  </section>
+
+  <section class="network-section" id="network" data-reveal>
+    <div class="section-quick-bar section-quick-bar-top">
+      <span class="quick-bar-label">Instant Nav:</span>
+      <a href="#farm" class="quick-jump-pill" data-i18n="jump_farm">↑ Back to 3D Farm Digital Twin</a>
+      <a href="#agents" class="quick-jump-pill" data-i18n="jump_agents">↓ Jump to Specialist Agents</a>
+    </div>
+    <p class="eyebrow" data-i18n="network_eyebrow">Signature · how a decision actually forms</p>
+    <h2 data-i18n="network_title">The living agent network</h2>
+    <p class="section-sub" data-i18n="network_sub">Four specialists reason in parallel over their own data only. Click a node to trace its path. Nothing reaches the farmer until the coordinator has checked their outputs against each other.</p>
+
+    <svg class="network" viewBox="0 0 900 420" role="img" aria-label="Diagram of four agents feeding a coordinator agent, which resolves conflicts into one plan">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <path id="edge-weather" class="edge" d="M150,80 C 320,80 340,180 430,200" marker-end="url(#arrow)"/>
+      <path id="edge-soil"    class="edge" d="M150,180 C 280,180 320,190 430,205" marker-end="url(#arrow)"/>
+      <path id="edge-pest"    class="edge" d="M150,280 C 280,280 320,230 430,215" marker-end="url(#arrow)"/>
+      <path id="edge-market"  class="edge" d="M150,380 C 320,380 340,240 430,220" marker-end="url(#arrow)"/>
+      <path id="edge-output"  class="edge edge-output" d="M620,210 C 700,210 720,210 790,210" marker-end="url(#arrow)"/>
+
+      <circle class="edge-particle" id="particle-weather" r="3.2" opacity="0"><animateMotion dur="1.1s" repeatCount="indefinite"><mpath href="#edge-weather"/></animateMotion></circle>
+      <circle class="edge-particle" id="particle-soil" r="3.2" opacity="0"><animateMotion dur="1.1s" repeatCount="indefinite"><mpath href="#edge-soil"/></animateMotion></circle>
+      <circle class="edge-particle" id="particle-pest" r="3.2" opacity="0"><animateMotion dur="1.1s" repeatCount="indefinite"><mpath href="#edge-pest"/></animateMotion></circle>
+      <circle class="edge-particle" id="particle-market" r="3.2" opacity="0"><animateMotion dur="1.1s" repeatCount="indefinite"><mpath href="#edge-market"/></animateMotion></circle>
+      <circle class="edge-particle particle-coord" id="particle-output" r="3.4" opacity="0"><animateMotion dur="1s" repeatCount="indefinite"><mpath href="#edge-output"/></animateMotion></circle>
+
+      <g id="node-weather" class="node node-agent" transform="translate(30,55)">
+        <rect width="220" height="50" rx="10"/>
+        <text x="18" y="22" class="node-title">Weather Agent</text>
+        <text x="18" y="39" class="node-sub">Rain &amp; timing</text>
+        <circle class="node-pulse" cx="200" cy="25" r="5"/>
+      </g>
+      <g id="node-soil" class="node node-agent" transform="translate(30,155)">
+        <rect width="220" height="50" rx="10"/>
+        <text x="18" y="22" class="node-title">Soil Agent</text>
+        <text x="18" y="39" class="node-sub">Moisture &amp; irrigation</text>
+        <circle class="node-pulse" cx="200" cy="25" r="5"/>
+      </g>
+      <g id="node-pest" class="node node-agent" transform="translate(30,255)">
+        <rect width="220" height="50" rx="10"/>
+        <text x="18" y="22" class="node-title">Pest Agent</text>
+        <text x="18" y="39" class="node-sub">Disease detection</text>
+        <circle class="node-pulse" cx="200" cy="25" r="5"/>
+      </g>
+      <g id="node-market" class="node node-agent" transform="translate(30,355)">
+        <rect width="220" height="50" rx="10"/>
+        <text x="18" y="22" class="node-title">Market Agent</text>
+        <text x="18" y="39" class="node-sub">Price trend</text>
+        <circle class="node-pulse" cx="200" cy="25" r="5"/>
+      </g>
+
+      <g id="node-coordinator" class="node node-coord" transform="translate(430,175)">
+        <rect width="190" height="70" rx="12"/>
+        <text x="20" y="30" class="node-title">Coordinator</text>
+        <text x="20" y="49" class="node-sub">Resolves conflicts</text>
+        <circle class="node-pulse" cx="168" cy="35" r="6"/>
+      </g>
+
+      <g id="node-output" class="node node-output" transform="translate(790,183)">
+        <rect width="90" height="54" rx="10"/>
+        <text x="45" y="32" class="node-title" text-anchor="middle">Plan</text>
+      </g>
+    </svg>
+  </section>
+
+  <section class="agents-section" id="agents" data-reveal>
+    <p class="eyebrow" data-i18n="agents_eyebrow">Agent detail</p>
+    <h2 data-i18n="agents_title">What each specialist decided</h2>
+
+    <div class="agents-grid">
+      <article class="agent-card" data-agent="weather">
+        <header><h3 data-i18n="agent_weather_title">Weather</h3><span class="pill pill-idle" data-role="status">idle</span></header>
+        <p class="agent-body" data-role="body" data-i18n="agent_weather_body">Waiting for a run. Reasons only about rain and forecast timing.</p>
+        <footer class="agent-meta" data-role="meta" hidden></footer>
+      </article>
+
+      <article class="agent-card" data-agent="soil">
+        <header><h3 data-i18n="agent_soil_title">Soil</h3><span class="pill pill-idle" data-role="status">idle</span></header>
+        <p class="agent-body" data-role="body" data-i18n="agent_soil_body">Waiting for a run. Reasons only about moisture and irrigation.</p>
+        <footer class="agent-meta" data-role="meta" hidden></footer>
+      </article>
+
+      <article class="agent-card agent-card-pest" data-agent="pest" id="pestAgentCard">
+        <header>
+          <div class="pest-header-left">
+            <h3 data-i18n="agent_pest_title">Pest &amp; Disease</h3>
+            <span class="leaf-badge" id="leafSourceBadge">Sample Leaf</span>
+          </div>
+          <span class="pill pill-idle" data-role="status">idle</span>
+        </header>
+
+        <div class="pest-upload-dropzone" id="pestDropzone">
+          <div class="pest-image-wrap">
+            <img id="leafPhoto" alt="Crop leaf sample" src="/api/leaf-image">
+            <div class="pest-image-empty" id="pestImageEmpty" hidden>
+              <span>No image loaded. Click "Upload Leaf Photo" or drop an image here.</span>
+            </div>
+            <div class="pest-drop-overlay" id="pestDropOverlay">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Drop Leaf Image Here</span>
+            </div>
+          </div>
+
+          <input type="file" id="leafFileInput" accept="image/*" style="display:none">
+          <div class="pest-actions-bar">
+            <button type="button" class="btn-pest" id="uploadLeafBtn" data-i18n="btn_upload_leaf">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Upload Leaf
+            </button>
+            <button type="button" class="btn-pest btn-pest-accent" id="diagnoseLeafBtn" data-i18n="btn_find_disease">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Find Disease
+            </button>
+            <button type="button" class="btn-pest btn-pest-subtle" id="resetLeafBtn" title="Reset back to default sample leaf" data-i18n="btn_sample_leaf">
+              Sample
+            </button>
+          </div>
+        </div>
+
+        <!-- Disease Identification Details -->
+        <div class="pest-disease-panel" id="pestDiseasePanel" hidden>
+          <div class="disease-main-row">
+            <span class="disease-kicker" data-i18n="pathology_title">Identified Pathology:</span>
+            <span class="disease-title" id="pestDiseaseTitle">—</span>
+          </div>
+          <div class="disease-badges-row" id="pestBadgesRow"></div>
+          <div class="disease-symptoms-text" id="pestSymptomsText"></div>
+        </div>
+
+        <p class="agent-body" data-role="body" data-i18n="agent_pest_body">Upload your crop leaf image above or click "Find Disease" to detect infections, pests, and symptoms.</p>
+        <footer class="agent-meta" data-role="meta" hidden></footer>
+      </article>
+
+      <article class="agent-card" data-agent="market">
+        <header><h3 data-i18n="agent_market_title">Market</h3><span class="pill pill-idle" data-role="status">idle</span></header>
+        <p class="agent-body" data-role="body" data-i18n="agent_market_body">Waiting for a run. Reasons only about mandi price records.</p>
+        <footer class="agent-meta" data-role="meta" hidden></footer>
+      </article>
+    </div>
+  </section>
+
+  <section class="plan-section" id="plan" data-reveal>
+    <article class="plan-card" id="planCard">
+      <div class="plan-header-row">
+        <p class="eyebrow" data-i18n="plan_eyebrow">Coordinator output</p>
+        <div class="plan-trans-bar" id="planTransBar">
+          <button type="button" class="btn-translate-plan" id="translatePlanBtn" title="Translate this decision plan into your chosen language">
+            <span class="trans-icon">🌐</span>
+            <span id="transPlanBtnText">Translate Plan</span>
+          </button>
+          <span class="plan-trans-note" id="planTransNote" hidden></span>
+        </div>
+      </div>
+      <h2 id="planHeadline" data-i18n="plan_headline_default">Final plan appears here after a run</h2>
+      <p class="plan-text" id="planText" data-i18n="plan_text_default">Run a live analysis above — the coordinator will read all four agents' outputs and produce one plan, naming any conflict it had to resolve.</p>
+      <div class="plan-conflict" id="planConflict" hidden>
+        <span class="conflict-label">Conflict resolved</span>
+        <p id="conflictText"></p>
+      </div>
+      <div class="plan-override" id="planOverride" hidden>
+        Deprioritized: <strong id="overrideAgent"></strong>
+      </div>
+    </article>
+  </section>
+
+  <section class="mech-section" id="mechanism" data-reveal>
+    <div class="novelty-badge-row">
+      <span class="novelty-badge">BioCoord-Clear</span>
+      <span class="novelty-subbadge">Deterministic biophysical constraint verification &amp; clearing engine</span>
+    </div>
+    <h2 data-i18n="nav_mechanism">Novelty &amp; Clearing Mechanism</h2>
+    <p class="section-sub">A formal multi-day solver that enforces hidden biophysical couplings (landscape infection risk cap, cumulative water quotas, chemical resistance) paired against the LLM baseline.</p>
+    <div class="mech-grid" id="mechBody">
+      <p class="log-empty">Waiting for a live run to solve mechanism constraints...</p>
+    </div>
+  </section>
+
+  <section class="log-section" id="activity" data-reveal>
+    <p class="eyebrow" data-i18n="log_eyebrow">Live activity</p>
+    <h2 data-i18n="log_title">What the system is doing right now</h2>
+    <div class="log-panel" id="logPanel">
+      <p class="log-empty" id="logEmpty" data-i18n="log_empty">No run yet. Activity from a live run will stream here in real time.</p>
+    </div>
+  </section>
+
+  <section class="history-section" id="history" data-reveal>
+    <div class="history-header">
+      <div>
+        <p class="eyebrow" data-i18n="history_eyebrow">Audit Trail &amp; Auto-Archive</p>
+        <h2 data-i18n="history_title">Decision &amp; Run History</h2>
+        <p class="section-sub" data-i18n="history_sub">Every analysis run, crop diagnostic, and multi-agent schedule is automatically saved below. Click "Restore" on any past record to instantly reload it into the dashboard.</p>
+      </div>
+      <div class="history-actions">
+        <input type="text" id="historySearchInput" class="history-search" placeholder="Filter by crop, state, or disease...">
+        <button type="button" class="history-btn history-btn-secondary" id="exportHistoryBtn" title="Export all history as JSON">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="export_json">Export JSON</span>
+        </button>
+        <button type="button" class="history-btn history-btn-danger" id="clearHistoryBtn" title="Clear all saved history">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span data-i18n="clear_history">Clear History</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="history-stats-bar">
+      <span class="history-stat"><strong id="historyCount">0</strong> runs saved</span>
+      <span class="history-stat-dot">·</span>
+      <span class="history-stat" id="historyLastSaved">Ready to record live runs</span>
+    </div>
+
+    <div class="history-list" id="historyList">
+      <div class="history-empty" id="historyEmpty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <p data-i18n="history_empty_title">No analysis history saved yet.</p>
+        <span data-i18n="history_empty_sub">Run a live analysis above — every metric, disease diagnostic, and coordinated schedule will automatically appear here.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating quick navigation dock -->
+  <aside class="quick-dock" id="quickDock" aria-label="Quick page navigation">
+    <a href="#farm" class="dock-btn" title="Jump to 3D Farm" data-i18n="dock_farm">🚜 Farm</a>
+    <a href="#network" class="dock-btn" title="Jump to Living Network" data-i18n="dock_network">🕸️ Network</a>
+    <a href="#agents" class="dock-btn" title="Jump to Agents" data-i18n="dock_agents">🤖 Agents</a>
+    <a href="#plan" class="dock-btn" title="Jump to Final Plan" data-i18n="dock_plan">📋 Plan</a>
+    <a href="#mechanism" class="dock-btn" title="Jump to Mechanism" data-i18n="dock_mechanism">⚡ Mechanism</a>
+    <a href="#history" class="dock-btn" title="Jump to History"><span data-i18n="dock_history">📜 History</span> <span class="dock-badge" id="dockBadge">0</span></a>
+  </aside>
+
+  <!-- Auto-save Toast Notification -->
+  <div class="save-toast" id="saveToast" aria-live="polite">
+    <span class="toast-icon">✓</span>
+    <span class="toast-msg" id="toastMsg">Saved to Decision History</span>
+  </div>
+
+  <footer class="footer">
+    <p data-i18n="footer_text">Every value on this page is pulled live — Open-Meteo for weather &amp; soil, data.gov.in for mandi prices, Gemini for all five agents. The 3D scene is a stylized illustration reacting to those same two real numbers; it is not a per-plant sensor feed. Nothing here is mocked.</p>
+  </footer>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="module" src="farm-scene.js"></script>
+<script src="translations.js"></script>
+<script src="app.js"></script>
+<div id="google_translate_element" style="display:none"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  if (window.google && google.translate) {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      autoDisplay: false
+    }, 'google_translate_element');
+  }
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+</body>
+</html>
